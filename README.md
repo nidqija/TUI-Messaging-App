@@ -17,8 +17,8 @@ This project is a **WhatsApp-inspired TUI (Terminal User Interface)** built for 
 
 | Component | Technology | Purpose |
 | :--- | :--- | :--- |
-| **Runtime** | [Bun](https://bun.sh/) | Fast JavaScript all-in-one toolkit |
-| **Language** | TypeScript | Type-safe business logic |
+| **Runtime** | [C#](https://learn.microsoft.com/en-us/dotnet/csharp/) | .NET compiler for C# application |
+| **Language** | C# | .NET ecosystem build |
 | **TUI Framework** | (e.g., Blessed / Ink) | Terminal-based UI rendering |
 | **Real-time** | WebSockets + Redis | Pub/Sub for cross-server messaging |
 | **Database** | PostgreSQL | Persistent chat history and user data |
