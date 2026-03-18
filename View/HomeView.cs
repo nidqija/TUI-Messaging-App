@@ -4,13 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Spectre.Console;
+using TUI_Messaging_App.TUI_Messaging_App.Router;
 
 
 namespace TUI_Messaging_App.TUI_Messaging_App.View
 {
     internal class HomeView
     {
-        public void displayHomeView()
+        public string displayHomeView()
         {
             // clear previous content to go to a new page
             AnsiConsole.Clear();
@@ -41,8 +42,33 @@ namespace TUI_Messaging_App.TUI_Messaging_App.View
                 "[red]Logout[/]"
                     }));
 
-            // add printing output to ensure output correctness
-            AnsiConsole.MarkupLine($"Entering: [bold cyan]{choice}[/]");
+
+            if (choice == "View Groups")
+            {
+
+                return "view groups";
+            }
+            else if (choice == "Create Group")
+            {
+
+                return "create group";
+            }
+            else if (choice == "View Messages")
+            {
+
+                return "view messages";
+            }
+            else if (choice == "[red]Logout[/]")
+            {
+
+                return "logout";
+            }
+            else
+            {
+
+                return "home";
+
+            }
         }
     }
 }
