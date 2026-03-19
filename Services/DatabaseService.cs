@@ -15,7 +15,27 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Services
         private string connectionString = $"Data Source={dbPath}";
 
 
-        public void initializeDB() {
+
+        public bool checkifExists(string sql, object parameters)
+        {
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+                var command = connection.CreateCommand();
+                command.CommandText = sql;
+                if (command == null)
+                {
+                    Console.WriteLine("Failed to create SQL command.");
+                    return false;
+                }
+                var result = connection.QuerySingle<int>(sql, parameters);
+                return result > 0;
+            }
+        }
+
+
+        public void initializeDB()
+        {
             using (var connection = new SqliteConnection(connectionString))
             {
                 connection.Open();
@@ -25,7 +45,8 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Services
                     CREATE TABLE IF NOT EXISTS users (
                         id INTEGER PRIMARY KEY AUTOINCREMENT,
                         username TEXT NOT NULL UNIQUE,
-                        password TEXT NOT NULL
+                        password TEXT NOT NULL ,
+                        email TEXT NOT NULL UNIQUE
                     );
                 ";
                 tableCmd.ExecuteNonQuery();
@@ -40,8 +61,47 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Services
                 }
             }
 
-           
 
+
+        }
+
+
+        public void getConnection()
+        {
+            using (var connection = new SqliteConnection(connectionString))
+            {
+
+                if (connection == null)
+                {
+                    Console.WriteLine("Failed to create database connection.");
+                    return;
+                }
+                connection.Open();
+                Console.WriteLine("Database connection established successfully.");
+            }
+        }
+
+
+
+        public void performSQLOperation(string sql)
+        {
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+                var command = connection.CreateCommand();
+                command.CommandText = sql;
+
+                if (command == null)
+                {
+                    Console.WriteLine("Failed to create SQL command.");
+                    return;
+                }
+
+                int rowsAffected = command.ExecuteNonQuery();
+                Console.WriteLine($"{rowsAffected} rows affected.");
+
+                
+            }
         }
     }
 }

@@ -31,11 +31,13 @@ namespace TUI_Messaging_App.TUI_Messaging_App
             var authController = new AuthView();
             var homeController = new HomeView();
             var signinController = new SignInView();
+            var signupController = new SignUpView();
 
 
             router.RegisterRoute("logout", authController.authView);
             router.RegisterRoute("home" , homeController.displayHomeView);
             router.RegisterRoute("signin" , signinController.signInView);
+            router.RegisterRoute("signup" , signupController.signUpView);
 
 
 

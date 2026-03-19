@@ -49,7 +49,7 @@ namespace TUI_Messaging_App.TUI_Messaging_App.View
             }
             else if (prompt == "Register")
             {
-                return "register";
+                return "signup";
             }
             else if (prompt == "Quit")
             {
