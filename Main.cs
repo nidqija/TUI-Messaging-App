@@ -32,12 +32,14 @@ namespace TUI_Messaging_App.TUI_Messaging_App
             var homeController = new HomeView();
             var signinController = new SignInView();
             var signupController = new SignUpView();
+            var viewgroupController = new GroupChatView();
 
 
             router.RegisterRoute("logout", authController.authView);
             router.RegisterRoute("home" , homeController.displayHomeView);
             router.RegisterRoute("signin" , signinController.signInView);
             router.RegisterRoute("signup" , signupController.signUpView);
+            router.RegisterRoute("view groups" , viewgroupController.groupChatView);
 
 
 

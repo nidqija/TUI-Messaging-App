@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Spectre.Console;
 
 namespace TUI_Messaging_App.TUI_Messaging_App.View
@@ -15,50 +11,58 @@ namespace TUI_Messaging_App.TUI_Messaging_App.View
         {
             AnsiConsole.Clear();
 
-            // 1. Create a centered header area
+            // 1. Header area
             var header = new Grid();
             header.AddColumn();
             header.AddRow(new FigletText("MESSENGER IN TERMINAL").Centered().Color(Color.Green));
             header.AddRow(new Rule("Authentication").LeftJustified().RuleStyle("white"));
             AnsiConsole.Write(header);
 
-            AnsiConsole.WriteLine(); // Spacing
+            AnsiConsole.WriteLine();
 
-            // 2. Build the Selection Prompt with custom styling
+            // 2. Selection Prompt
             var prompt = AnsiConsole.Prompt(new SelectionPrompt<string>()
                 .Title("[bold white]Please select an option to continue:[/]")
                 .PageSize(5)
+                .UseConverter(name => $" [green]❯[/] {name}") // Consistent icon usage
                 .HighlightStyle(new Style(foreground: Color.Green, decoration: Decoration.Bold))
                 .AddChoices(options));
 
-
-
-            
-
-            
             AnsiConsole.WriteLine();
 
-            // 4. Add a clean footer rule
+            // 3. Footer
             AnsiConsole.Write(new Rule().RuleStyle("grey30"));
             AnsiConsole.MarkupLine("[grey]Status: [red]Offline[/] | Server: Localhost[/]");
 
+            // 4. Transition Logic
+            string destination = "home";
+            string statusMessage = "Processing...";
 
-            if ( prompt == "Login")
+            switch (prompt)
             {
-                return "signin";
-            }
-            else if (prompt == "Register")
-            {
-                return "signup";
-            }
-            else if (prompt == "Quit")
-            {
-                return "exit";
+                case "Login":
+                    destination = "signin";
+                    statusMessage = "Opening login portal...";
+                    break;
+                case "Register":
+                    destination = "signup";
+                    statusMessage = "Loading registration form...";
+                    break;
+                case "Quit":
+                    destination = "exit";
+                    statusMessage = "Shutting down...";
+                    break;
             }
 
+            // The Spinner Transition
+            AnsiConsole.Status()
+                .Spinner(Spinner.Known.Dots)
+                .Start($"[green]{statusMessage}[/]", ctx =>
+                {
+                    System.Threading.Thread.Sleep(700);
+                });
 
-            // Your original return logic (you can expand this to check the choice later)
-            return "home";
+            return destination;
         }
     }
 }
