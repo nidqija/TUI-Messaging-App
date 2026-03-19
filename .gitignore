@@ -1,2 +1,3 @@
 ﻿*.md
 !README.md
+.env

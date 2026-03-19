@@ -71,5 +71,13 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Controller
                 return false;
             }
         }
+
+
+        public bool handleSignOut()
+        {
+
+
+            return true;
+        }
     }
 }
