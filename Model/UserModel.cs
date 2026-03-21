@@ -21,7 +21,7 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Model
             dbService = new DatabaseService();
         }
 
-        public bool createUser(string username , string password , string email)
+        public bool createUser(string username, string password, string email)
         {
             Console.WriteLine($"User created with username: {username}, email: {email}");
 
@@ -33,7 +33,7 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Model
         }
 
         // This method will validate if the user exists in the database with the given username and password
-        public UserModel validateUser(string username , string password)
+        public UserModel validateUser(string username, string password)
         {
             Console.WriteLine($"Validating user with username: {username}");
 
@@ -47,13 +47,36 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Model
             return dbService.GetSingle<UserModel>(sql, new { username = username, password = password });
         }
 
-            public UserModel searchUser(string username)
-            {
-                Console.WriteLine($"Searching for user with username: {username}");
-    
-                string sql = "SELECT id, username, email FROM users WHERE username = @username";
-    
-                return dbService.GetSingle<UserModel>(sql, new { username = username });
+        public UserModel searchUser(string username)
+        {
+            Console.WriteLine($"Searching for user with username: {username}");
+
+            string sql = "SELECT id, username, email FROM users WHERE username = @username";
+
+            return dbService.GetSingle<UserModel>(sql, new { username = username });
         }
+
+
+        public bool sendMessageAsRequest(string senderUsername, string receiverUsername, string messageContent)
+        {
+            Console.WriteLine($"Sending message from {senderUsername} to {receiverUsername} with content: {messageContent}");
+
+            // First, we need to get the user IDs of the sender and receiver
+
+            UserModel sender = searchUser(senderUsername);
+            UserModel receiver = searchUser(receiverUsername);
+            if (sender == null || receiver == null)
+            {
+                Console.WriteLine("Sender or receiver does not exist.");
+                return false;
+            }
+
+
+            string sql = $"INSERT INTO requests (sender_id, receiver_id, message , status) VALUES ({sender.id}, {receiver.id}, '{messageContent}' , 'pending' )";
+            dbService.performSQLOperation(sql);
+            return true;
+
+        }
+
     }
 }

@@ -48,7 +48,7 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Controller
 
         public bool handleSignIn(String username, String password)
         {
-           UserModel userModel = new UserModel();
+            UserModel userModel = new UserModel();
             var user = userModel.validateUser(username, password);
             if (user != null)
             {
@@ -78,16 +78,33 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Controller
             UserModel userModel = new UserModel();
             var user = userModel.searchUser(usernametoSearch);
 
-            if(user != null)
+            if (user != null)
             {
                 return true;
-            } else
+            }
+            else
             {
                 return false;
             }
 
 
-            return false ;
+            return false;
+        }
+
+        public bool handleSendMessageAsRequest(string senderUsername, string receiverUsername, string messageContent)
+        {
+            UserModel userModel = new UserModel();
+            if (userModel.sendMessageAsRequest(senderUsername, receiverUsername, messageContent))
+            {
+                Console.WriteLine("Message sent successfully!");
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("Failed to send message. Please try again.");
+                return false;
+            }
+            ;
         }
     }
 }

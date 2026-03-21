@@ -5,11 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 using Spectre.Console;
 using TUI_Messaging_App.TUI_Messaging_App.Controller;
+using TUI_Messaging_App.TUI_Messaging_App.Model;
+using TUI_Messaging_App.TUI_Messaging_App.Services;
 
 namespace TUI_Messaging_App.TUI_Messaging_App.View
 {
     internal class SearchUserView
     {
+
+        
         public string searchUserView()
         {
             AnsiConsole.Clear();
@@ -48,6 +52,21 @@ namespace TUI_Messaging_App.TUI_Messaging_App.View
 
                  if (action == "Back to Home")
                 {
+                    return "home";
+                }
+
+                else if ( action == "Search Another User")
+                {
+                    return "search users";
+                }
+
+                else if (action == "Send Chat Request")
+                {
+                    var message = AnsiConsole.Ask<string>($"\nEnter a message to send with the chat request to [bold yellow]{username}[/]\n:");
+
+                    userController.handleSendMessageAsRequest(SessionInitializer.Username, username, message); 
+
+                    System.Threading.Thread.Sleep(1500);
                     return "home";
                 }
 

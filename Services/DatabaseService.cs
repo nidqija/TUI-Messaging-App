@@ -62,6 +62,21 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Services
                 ";
                 tableCmd.ExecuteNonQuery();
 
+                var requestsTableCmd = connection.CreateCommand();
+                requestsTableCmd.CommandText =
+                    @"
+                    CREATE TABLE IF NOT EXISTS requests (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        sender_id INTEGER NOT NULL,
+                        receiver_id INTEGER NOT NULL,
+                        message TEXT,
+                        status TEXT NOT NULL,
+                        FOREIGN KEY (sender_id) REFERENCES users(id),
+                        FOREIGN KEY (receiver_id) REFERENCES users(id)
+                    );";
+
+                requestsTableCmd.ExecuteNonQuery();
+
                 if (tableCmd.ExecuteNonQuery() > 0)
                 {
                     Console.WriteLine("Table 'users' created successfully.");
