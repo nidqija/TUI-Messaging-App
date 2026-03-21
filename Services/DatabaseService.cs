@@ -16,6 +16,17 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Services
 
 
 
+        public T GetSingle<T>(string sql, object parameters)
+        {
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+                // This finds the first match and maps it to your class (UserModel)
+                return connection.QueryFirstOrDefault<T>(sql, parameters);
+            }
+        }
+
+
         public bool checkifExists(string sql, object parameters)
         {
             using (var connection = new SqliteConnection(connectionString))

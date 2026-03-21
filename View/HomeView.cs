@@ -1,10 +1,15 @@
-﻿using System;
+﻿    using System;
 using Spectre.Console;
+using TUI_Messaging_App.TUI_Messaging_App.Controller;
+using TUI_Messaging_App.TUI_Messaging_App.Model;
+using TUI_Messaging_App.TUI_Messaging_App.Services;
 
 namespace TUI_Messaging_App.TUI_Messaging_App.View
 {
     internal class HomeView
     {
+
+
         public string displayHomeView()
         {
             AnsiConsole.Clear();
@@ -19,6 +24,11 @@ namespace TUI_Messaging_App.TUI_Messaging_App.View
             rule.Style = "grey30";
             AnsiConsole.Write(rule);
             AnsiConsole.WriteLine();
+
+            if (SessionInitializer.isLoggedIn)
+            {
+                AnsiConsole.MarkupLine($"[green]Welcome back, {SessionInitializer.Username}![/]");
+            }
 
             // Menu selection
             var choice = AnsiConsole.Prompt(
@@ -55,6 +65,7 @@ namespace TUI_Messaging_App.TUI_Messaging_App.View
                 case "[red]Logout[/]":
                     destination = "logout";
                     statusMessage = "Logging out securely...";
+                   
                     break;
             }
 

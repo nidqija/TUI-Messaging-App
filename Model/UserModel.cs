@@ -9,35 +9,42 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Model
 {
     internal class UserModel
     {
-
         private DatabaseService dbService;
+
+        public int id { get; set; }
+        public string username { get; set; }
+        public string email { get; set; }
+        public string password { get; set; }
+
+        public UserModel()
+        {
+            dbService = new DatabaseService();
+        }
 
         public bool createUser(string username , string password , string email)
         {
             Console.WriteLine($"User created with username: {username}, email: {email}");
-
-            dbService = new DatabaseService();
 
             String sql = $"INSERT INTO users (username, email , password) VALUES ('{username}', '{email}' , '{password}')";
 
             dbService.performSQLOperation(sql);
 
             return true;
-
-            
-
         }
 
-        public bool validateUser(string username , string password)
+        // This method will validate if the user exists in the database with the given username and password
+        public UserModel validateUser(string username , string password)
         {
             Console.WriteLine($"Validating user with username: {username}");
 
-            dbService = new DatabaseService();
             // We want to count how many users match this pair
-            string sql = "SELECT COUNT(1) FROM users WHERE username = @username AND password = @password";
+            string sql = "SELECT id, username, email FROM users WHERE username = @username AND password = @password";
 
             // You should use parameters to prevent SQL Injection!
-            return dbService.checkifExists(sql, new { username, password });
+            // once we get the result , we will return a usermodel object with the data of the current user if it exists ,
+            // otherwise we will return null
+
+            return dbService.GetSingle<UserModel>(sql, new { username = username, password = password });
         }
     }
 }

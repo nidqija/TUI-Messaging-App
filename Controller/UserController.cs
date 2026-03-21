@@ -5,6 +5,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using TUI_Messaging_App.TUI_Messaging_App.Model;
+using TUI_Messaging_App.TUI_Messaging_App.Services;
 
 namespace TUI_Messaging_App.TUI_Messaging_App.Controller
 {
@@ -47,27 +48,17 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Controller
 
         public bool handleSignIn(String username, String password)
         {
-            if (username == null || password == null)
+           UserModel userModel = new UserModel();
+            var user = userModel.validateUser(username, password);
+            if (user != null)
             {
-                Console.WriteLine("Please fill in all fields.");
-                return false;
-            }
-            Console.WriteLine($"Handling sign in for username: {username}");
-          
-            if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
-            {
-
-                UserModel userModel = new UserModel();
-                if (userModel.validateUser(username, password))
-                {
-                    Console.WriteLine("Login Successful!");
-                    return true;
-                }
-                  return false;
+                Console.WriteLine($"User {username} logged in successfully!");
+                SessionInitializer.Login(user.id, user.username, user.email);
+                return true;
             }
             else
             {
-                Console.WriteLine("Invalid credentials. Please try again.");
+                Console.WriteLine("Invalid username or password. Please try again.");
                 return false;
             }
         }
@@ -75,8 +66,8 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Controller
 
         public bool handleSignOut()
         {
-
-
+            SessionInitializer.Logout();
+            Console.WriteLine("User logged out successfully!");
             return true;
         }
     }
