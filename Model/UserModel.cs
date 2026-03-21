@@ -46,5 +46,14 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Model
 
             return dbService.GetSingle<UserModel>(sql, new { username = username, password = password });
         }
+
+            public UserModel searchUser(string username)
+            {
+                Console.WriteLine($"Searching for user with username: {username}");
+    
+                string sql = "SELECT id, username, email FROM users WHERE username = @username";
+    
+                return dbService.GetSingle<UserModel>(sql, new { username = username });
+        }
     }
 }

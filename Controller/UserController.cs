@@ -70,5 +70,24 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Controller
             Console.WriteLine("User logged out successfully!");
             return true;
         }
+
+
+        public bool handleSearchUser(string usernametoSearch)
+        {
+
+            UserModel userModel = new UserModel();
+            var user = userModel.searchUser(usernametoSearch);
+
+            if(user != null)
+            {
+                return true;
+            } else
+            {
+                return false;
+            }
+
+
+            return false ;
+        }
     }
 }

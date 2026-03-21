@@ -38,6 +38,7 @@ namespace TUI_Messaging_App.TUI_Messaging_App.View
                     .MoreChoicesText("[grey](Move up and down to reveal more options)[/]")
                     .UseConverter(name => $" [cyan]❯[/] {name}") 
                     .AddChoices(new[] {
+                        "Search Users",
                         "View Groups",
                         "Create Group",
                         "View Messages",
@@ -50,6 +51,12 @@ namespace TUI_Messaging_App.TUI_Messaging_App.View
 
             switch (choice)
             {
+
+                case "Search Users":
+                    destination = "search users";
+                    statusMessage = "Searching for users...";
+                    break;
+
                 case "View Groups":
                     destination = "view groups";
                     statusMessage = "Opening groups...";
