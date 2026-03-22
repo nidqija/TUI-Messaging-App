@@ -12,16 +12,23 @@
                 private DatabaseService dbService;
 
 
-               // this method will fetch all the message requests for a given user and return it as a list
-               // of strings
-               
-               public List<string> fetchMessageRequests(string currentUsername)
+                public class MessageRequestObject
+                {
+                    public string Username { get; set; }
+                    public string Message { get; set; }
+                }
+
+
+        // this method will fetch all the message requests for a given user and return it as a list
+        // of strings
+
+        public List<MessageRequestObject> fetchMessageRequests(string currentUsername)
               {
                   dbService = new DatabaseService();
-                  string sql = @"SELECT u.username FROM requests r JOIN users u ON r.sender_id = u.id WHERE 
+                  string sql = @"SELECT u.username AS Username , r.message AS Message FROM requests r JOIN users u ON r.sender_id = u.id WHERE 
                                r.receiver_id = (SELECT id FROM users WHERE username = @username) AND r.status = 'pending'";
                    
-                  var results = dbService.GetList<string>(sql, new { username = currentUsername });
+                  var results = dbService.GetList<MessageRequestObject>(sql, new { username = currentUsername });
 
                   return results.ToList();
 

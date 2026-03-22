@@ -4,6 +4,7 @@ using System.Linq;
 using TUI_Messaging_App.TUI_Messaging_App.Controller;
 using TUI_Messaging_App.TUI_Messaging_App.Services;
 using Spectre.Console;
+using TUI_Messaging_App.TUI_Messaging_App.Model;
 
 namespace TUI_Messaging_App.TUI_Messaging_App.View
 {
@@ -23,7 +24,7 @@ namespace TUI_Messaging_App.TUI_Messaging_App.View
 
             // 2. Fetch Data
             MessageRequestsController messageRequestController = new MessageRequestsController();
-            List<string> requests = messageRequestController.handleFetchMessageRequests(SessionInitializer.Username);
+            List<MessageRequestsModel.MessageRequestObject> requests = messageRequestController.handleFetchMessageRequests(SessionInitializer.Username);
 
             // 3. UI Header
             AnsiConsole.Write(
@@ -44,15 +45,43 @@ namespace TUI_Messaging_App.TUI_Messaging_App.View
                 var table = new Table();
                 table.Border(TableBorder.Rounded);
                 table.AddColumn("[bold cyan]Sender Username[/]");
+                table.AddColumn("[bold cyan]Message[/]");
                 table.AddColumn("[bold cyan]Status[/]");
 
                 foreach (var request in requests)
                 {
-                    table.AddRow(request, "[yellow]Pending[/]");
+                    table.AddRow(request.Username , request.Message ?? "[grey]No Message[/]" , "[yellow]Pending[/]");
                 }
 
                 AnsiConsole.Write(table);
                 AnsiConsole.MarkupLine($"\n[bold white]Total:[/] {requests.Count} request(s)");
+
+                var choice = AnsiConsole.Prompt(
+                    
+                    new SelectionPrompt<string>()
+                        .Title("\n[bold green]What would you like to do?[/]")
+                        .AddChoices(new[] { "Accept Request", "Go Back" }));
+
+                if (choice == "Accept Request")
+                {
+                    var senderToAccept = AnsiConsole.Prompt(
+                        new SelectionPrompt<string>()
+                            .Title("[bold green]Select a request to accept:[/]")
+                            .AddChoices(requests.Select(r => r.Username).ToArray()));
+
+                    UserController userController = new UserController();
+                    if (userController.handleAcceptChatRequest(senderToAccept))
+                    {
+                        System.Threading.Thread.Sleep(2000); // Pause for 2 seconds to show the success message
+                        return "home"; // Redirect back to home after accepting
+                    }
+                    else
+                    {
+                        AnsiConsole.MarkupLine($"[red]Failed to accept the request from {senderToAccept}. Please try again.[/]");
+                        return "view requests"; // Stay on the same page to try again
+                    }
+
+                }
             }
 
             // 5. Footer

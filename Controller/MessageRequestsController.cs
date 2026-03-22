@@ -11,7 +11,7 @@
         internal class MessageRequestsController
         {
 
-            public List<string> handleFetchMessageRequests(string username)
+            public List<MessageRequestsModel.MessageRequestObject> handleFetchMessageRequests(string username)
             {
                 MessageRequestsModel messageRequestsModel = new MessageRequestsModel();
 
@@ -20,7 +20,7 @@
                   var requests = messageRequestsModel.fetchMessageRequests(username);
 
                   // Return the list if it has data, otherwise an empty list
-                  return requests ?? new List<string>();
+                  return requests ?? new List<MessageRequestsModel.MessageRequestObject>();
         }
         }
 }

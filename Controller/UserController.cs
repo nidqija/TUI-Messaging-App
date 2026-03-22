@@ -106,5 +106,21 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Controller
             }
             ;
         }
+
+
+        public bool handleAcceptChatRequest(string username)
+        {
+            UserModel userModel = new UserModel();
+            if (userModel.acceptMessageRequest(username , SessionInitializer.Username  ))
+            {
+                Console.WriteLine("Chat request accepted successfully!");
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("Failed to accept chat request. Please try again.");
+                return false;
+            }
+        } 
     }
 }

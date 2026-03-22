@@ -78,5 +78,22 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Model
 
         }
 
+
+        public bool acceptMessageRequest(string senderUsername, string receiverUsername)
+        {
+            Console.WriteLine($"Accepting message request from {senderUsername} to {receiverUsername}");
+            UserModel sender = searchUser(senderUsername);
+            UserModel receiver = searchUser(receiverUsername);
+            if (sender == null || receiver == null)
+            {
+                Console.WriteLine("Sender or receiver does not exist.");
+                return false;
+            }
+            string sql = $"UPDATE requests SET status = 'accepted' WHERE sender_id = {sender.id} AND receiver_id = {receiver.id} AND status = 'pending'";
+            dbService.performSQLOperation(sql);
+            return true;
+
+        }
+
     }
 }
