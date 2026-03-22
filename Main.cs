@@ -34,6 +34,7 @@ namespace TUI_Messaging_App.TUI_Messaging_App
             var signupController = new SignUpView();
             var viewgroupController = new GroupChatView();
             var searchUserController = new SearchUserView();
+            var viewRequestsController = new SeeRequestsView();
 
 
             router.RegisterRoute("logout", authController.authView);
@@ -42,6 +43,8 @@ namespace TUI_Messaging_App.TUI_Messaging_App
             router.RegisterRoute("signup" , signupController.signUpView);
             router.RegisterRoute("view groups" , viewgroupController.groupChatView);
             router.RegisterRoute("search users", searchUserController.searchUserView);
+            router.RegisterRoute("view requests", viewRequestsController.seeRequestsView );
+
 
 
 

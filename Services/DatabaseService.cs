@@ -16,6 +16,8 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Services
 
 
 
+        // fetch any single query from the database based on table queries
+        
         public T GetSingle<T>(string sql, object parameters)
         {
             using (var connection = new SqliteConnection(connectionString))
@@ -23,6 +25,18 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Services
                 connection.Open();
                 // This finds the first match and maps it to your class (UserModel)
                 return connection.QueryFirstOrDefault<T>(sql, parameters);
+            }
+        }
+
+        // fetch all queries from the database based on table queries
+        public IEnumerable<T> GetList<T>(string sql, object parameters = null)
+        {
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+
+                return connection.Query<T>(sql , parameters);
+
             }
         }
 
