@@ -22,5 +22,14 @@
                   // Return the list if it has data, otherwise an empty list
                   return requests ?? new List<MessageRequestsModel.MessageRequestObject>();
         }
+
+           public List<MessageRequestsModel.MessageRequestObject> handleFetchApprovedContacts(string username)
+        {
+            MessageRequestsModel messageRequestsModel = new MessageRequestsModel();
+
+            var requests = messageRequestsModel.fetchAcceptedChatRequests(username);
+
+            return requests ?? new List<MessageRequestsModel.MessageRequestObject>();
+        }
         }
 }

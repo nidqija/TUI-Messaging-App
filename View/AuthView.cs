@@ -5,7 +5,7 @@ namespace TUI_Messaging_App.TUI_Messaging_App.View
 {
     internal class AuthView
     {
-        private string[] options = new string[] { "Login", "Register", "Quit" };
+        private string[] options = new string[] { "Sign In", "Sign Up", "Quit" };
 
         public string authView()
         {

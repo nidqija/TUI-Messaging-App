@@ -95,5 +95,25 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Model
 
         }
 
+
+       /* public bool seeApprovedMessageRequest(string senderUsername , string receiverUsername)
+        {
+            Console.WriteLine($"Seeing approved message request from {senderUsername} to {receiverUsername}");
+            UserModel sender = searchUser(senderUsername);
+            UserModel receiver = searchUser(receiverUsername);
+
+            if (sender == null || receiver == null)
+            {
+                Console.WriteLine("Sender or receiver does not exist.");
+                return false;
+            }
+
+            string sql = $"SELECT receiver_id FROM requests WHERE sender_id= {sender.id}";
+
+            dbService.performSQLOperation(sql);
+
+            return true;
+        } */
+
     }
 }

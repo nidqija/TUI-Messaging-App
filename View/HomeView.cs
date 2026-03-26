@@ -39,6 +39,7 @@ namespace TUI_Messaging_App.TUI_Messaging_App.View
                     .UseConverter(name => $" [cyan]❯[/] {name}") 
                     .AddChoices(new[] {
                         "Search Users",
+                        "View Contacts",
                         "View Groups",
                         "Create Group",
                         "View Messages",
@@ -58,13 +59,14 @@ namespace TUI_Messaging_App.TUI_Messaging_App.View
                     statusMessage = "Searching for users...";
                     break;
 
+                case "View Contacts":
+                    destination = "view contacts";
+                    statusMessage = "Loading your contacts...";
+                    break;
+
                 case "View Groups":
                     destination = "view groups";
                     statusMessage = "Opening groups...";
-                    break;
-                case "Create Group":
-                    destination = "create group";
-                    statusMessage = "Preparing group setup...";
                     break;
 
                 case "View User Requests":

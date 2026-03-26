@@ -122,5 +122,21 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Controller
                 return false;
             }
         } 
+
+
+       /* public bool fetchApprovedContact(string username)
+        {
+            UserModel userModel = new UserModel();
+            if (userModel.seeApprovedMessageRequest(username, SessionInitializer.Username))
+            {
+                Console.WriteLine("Approved contact fetched successfully!");
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("Failed to fetch approved contact. Please try again.");
+                return false;
+            }
+        } */
     }
 }
