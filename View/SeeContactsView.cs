@@ -41,33 +41,32 @@ namespace TUI_Messaging_App.TUI_Messaging_App.View
                 Console.ReadKey(true);
                 return "home";
             }
-            else
+
+            // --- Contact Selection ---
+            // We create a list of strings for the prompt, adding a "Back" option at the top
+            var contactChoices = requests.Select(r => r.Username).ToList();
+            contactChoices.Insert(0, "[grey]<- Back to Home[/]");
+
+            var selectedContact = AnsiConsole.Prompt(
+                new SelectionPrompt<string>()
+                    .Title("Select a [green]contact[/] to message or go back:")
+                    .PageSize(10)
+                    .MoreChoicesText("[grey](Move up and down to reveal more contacts)[/]")
+                    .AddChoices(contactChoices));
+
+            // Handle the "Back" logic
+            if (selectedContact == "[grey]<- Back to Home[/]")
             {
-                // Create a table for a cleaner layout
-                var table = new Table()
-                    .Border(TableBorder.Rounded)
-                    .BorderColor(Color.Blue)
-                    .AddColumn(new TableColumn("[u]Username[/]").Centered())
-                    .AddColumn(new TableColumn("[u]Status[/]").Centered());
-
-                foreach (var request in requests)
-                {
-                    table.AddRow($"[green]{request.Username}[/]", "[italic grey]Connected[/]");
-                }
-
-                AnsiConsole.Write(table);
+                return "home";
             }
 
-            AnsiConsole.WriteLine();
-            AnsiConsole.Write(new Rule().RuleStyle("grey"));
+            // Logic for when a contact is selected
+            // You might want to store the selectedContact in a session variable 
+            // or pass it to the next view.
+            AnsiConsole.MarkupLine($"\nOpening chat with [bold green]{selectedContact}[/]...");
+            System.Threading.Thread.Sleep(500); // Brief pause for UX
 
-            // Using a Selection Prompt makes the UI feel more like an app than a terminal script
-            var choice = AnsiConsole.Prompt(
-                new SelectionPrompt<string>()
-                    .Title("What would you like to do?")
-                    .AddChoices(new[] { "Back to Home", "View Message History" }));
-
-            return choice == "Back to Home" ? "home" : "view contacts";
+            return "view messages"; // Or whatever your messaging view key is
         }
     }
 }
