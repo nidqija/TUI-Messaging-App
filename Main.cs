@@ -31,22 +31,24 @@ namespace TUI_Messaging_App.TUI_Messaging_App
 // ============================= registering routes for pages ============================= //
             var authController = new AuthView();
             var homeController = new HomeView();
-            var signinController = new SignInView();
+            var signInController = new SignInView();
             var signupController = new SignUpView();
             var viewgroupController = new GroupChatView();
             var searchUserController = new SearchUserView();
             var viewRequestsController = new SeeRequestsView();
             var seeContactsController = new SeeContactsView();
+            var chatwithContactController = new ChatwithContactView();
 
 
             router.RegisterRoute("logout", authController.authView);
             router.RegisterRoute("home" , homeController.displayHomeView);
-            router.RegisterRoute("signin" , signinController.signInView);
+            router.RegisterRoute("signin" , signInController.signInView);
             router.RegisterRoute("signup" , signupController.signUpView);
             router.RegisterRoute("view groups" , viewgroupController.groupChatView);
             router.RegisterRoute("search users", searchUserController.searchUserView);
             router.RegisterRoute("view requests", viewRequestsController.seeRequestsView );
             router.RegisterRoute("view contacts", seeContactsController.seeContactView );
+            router.RegisterRoute("chat with contact", chatwithContactController.chatwithContactView );
 
 
 

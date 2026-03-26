@@ -19,6 +19,8 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Services
         public static string Email { get; set; }
         public static bool isLoggedIn { get; private set; }
 
+        public static string ActiveChatUser { get; set; }
+
 
         public static void Login ( int id, string username, string email) {
             UserID = id;

@@ -54,19 +54,23 @@ namespace TUI_Messaging_App.TUI_Messaging_App.View
                     .MoreChoicesText("[grey](Move up and down to reveal more contacts)[/]")
                     .AddChoices(contactChoices));
 
+            
+
             // Handle the "Back" logic
-            if (selectedContact == "[grey]<- Back to Home[/]")
+            if (selectedContact == "[grey]Back to Home[/]")
             {
                 return "home";
             }
+
+            SessionInitializer.ActiveChatUser = selectedContact;
 
             // Logic for when a contact is selected
             // You might want to store the selectedContact in a session variable 
             // or pass it to the next view.
             AnsiConsole.MarkupLine($"\nOpening chat with [bold green]{selectedContact}[/]...");
-            System.Threading.Thread.Sleep(500); // Brief pause for UX
+            System.Threading.Thread.Sleep(500);
 
-            return "view messages"; // Or whatever your messaging view key is
+            return "chat with contact"; 
         }
     }
 }

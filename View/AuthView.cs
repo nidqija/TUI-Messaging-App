@@ -40,11 +40,11 @@ namespace TUI_Messaging_App.TUI_Messaging_App.View
 
             switch (prompt)
             {
-                case "Login":
+                case "Sign In":
                     destination = "signin";
                     statusMessage = "Opening login portal...";
                     break;
-                case "Register":
+                case "Sign Up":
                     destination = "signup";
                     statusMessage = "Loading registration form...";
                     break;
