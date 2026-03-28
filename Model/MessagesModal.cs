@@ -58,5 +58,7 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Model
 
             return databaseService.GetList<MessagesModal>(sql).ToList();
         }
+
+       
     }
 }
