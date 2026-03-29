@@ -11,20 +11,13 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Controller
     {
 
         MessagesModal messagesModal = new MessagesModal();
+        private readonly Services.RedisMessagingServices redisMessagingServices = new Services.RedisMessagingServices();
         public bool insertMessage(string senderUsername, string receiverUsername, string messageContent)
         {
 
             Console.WriteLine($"Attempting to send message from {senderUsername} to {receiverUsername} with content: {messageContent}");
 
-            if (messagesModal.insertMessage(senderUsername, receiverUsername, messageContent))
-            {
-                return true;
-            }
-            else
-            {
-                Console.WriteLine("Failed to send message. Please check the database connection and ensure the message content is valid.");
-                return false;
-            }
+            return redisMessagingServices.insertMessage(senderUsername, receiverUsername, messageContent);
 
         }
 
