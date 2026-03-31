@@ -59,6 +59,22 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Model
             return databaseService.GetList<MessagesModal>(sql).ToList();
         }
 
-       
-    }
+
+        public List<MessagesModal> getLatestMessageFromDB(string user1, string user2)
+        {
+            string sql = $"SELECT id, " +
+                         $"sender_username AS SenderUsername, " +
+                         $"receiver_username AS ReceiverUsername, " +
+                         $"message AS MessageContent, " +
+                         $"timestamp AS Timestamp " +
+                         $"FROM messages " +
+                         $"WHERE (sender_username = '{user1}' AND receiver_username = '{user2}') " +
+                         $"OR (sender_username = '{user2}' AND receiver_username = '{user1}') " +
+                         $"ORDER BY timestamp DESC " +
+                         $"LIMIT 1";
+            return databaseService.GetList<MessagesModal>(sql).ToList();
+        }
+
+
+        }
 }

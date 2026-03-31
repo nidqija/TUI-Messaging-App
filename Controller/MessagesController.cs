@@ -33,5 +33,19 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Controller
 
             return messagesModal.getMessagesBetweenUsers(user1, user2);
         }
+
+        public List<MessagesModal> getLatestMessage(string user1, string user2)
+        {
+            var messages = getMessagesBetweenUsers(user1, user2);
+            if (messages.Count > 0)
+            {
+                return new List<MessagesModal> { messages.Last() };
+            }
+            else
+            {
+                Console.WriteLine($"No messages found between {user1} and {user2}.");
+                return new List<MessagesModal>();
+            }
+        }
     }
 }
