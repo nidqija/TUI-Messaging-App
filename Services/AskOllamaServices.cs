@@ -19,22 +19,32 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Services
 
         public void Start()
         {
+            // subscribe to redis channel for new messages to ollama
             var sub = redis.GetSubscriber();
 
-
+            // listen for new messages sent to ollama and respond with the AI response
             sub.Subscribe("messages:ollama", async (channel, message) =>
             {
                 var recentMessages = messagesController.getMessagesBetweenUsers("ollama", SessionInitializer.Username);
                 var lastUserMsg = recentMessages.LastOrDefault(m => m.SenderUsername !=  "ollama");
 
 
-                if (lastUserMsg != null && lastUserMsg.SenderUsername != "ollama")
+                if (lastUserMsg != null &&
+        lastUserMsg.SenderUsername != "ollama" &&
+        (lastUserMsg.MessageContent.StartsWith("/ollama") || lastUserMsg.MessageContent.StartsWith("@ollama")))
                 {
-                    string aiResult = await GetOllamaResponse(lastUserMsg.MessageContent);
+                    string cleanPrompt = lastUserMsg.MessageContent
+            .Replace("/ollama", "")
+            .Replace("@ollama", "")
+            .Trim();
 
-                    messagesController.insertMessage("ollama", SessionInitializer.Username, aiResult);
+                    string aiResult = await GetOllamaResponse(cleanPrompt);
+
+                    messagesController.insertMessage("ollama", SessionInitializer.Username, $"[OLLAMA] {aiResult}");
                 }
             });
+
+
         }
 
 

@@ -63,6 +63,15 @@ namespace TUI_Messaging_App.TUI_Messaging_App.View
                             inputBuffer.Clear();
                             _needRefresh = true;
                         }
+
+                        else if (content.StartsWith("@ollama"))
+                        {
+                            string prompt = content.Substring("@ollama".Length).Trim();
+                            messagesController.insertMessage(currentUser, contact, $"[OLLAMA] {prompt}");
+                            inputBuffer.Clear();
+                            _needRefresh = true;
+
+                        }
                     }
                     else if (key.Key == ConsoleKey.Backspace && inputBuffer.Length > 0)
                     {
@@ -97,7 +106,7 @@ namespace TUI_Messaging_App.TUI_Messaging_App.View
             foreach (var message in messages)
             {
                 bool isMe = message.SenderUsername == currentUser;
-                var panel = new Panel(message.MessageContent ?? "")
+                var panel = new Panel(Markup.Escape(message.MessageContent ?? ""))
                     .RoundedBorder()
                     .Header($"[grey]{message.Timestamp:HH:mm}[/]", isMe ? Justify.Right : Justify.Left)
                     .BorderColor(isMe ? Color.Blue : Color.Green);

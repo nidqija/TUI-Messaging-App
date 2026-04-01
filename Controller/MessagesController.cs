@@ -41,6 +41,8 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Controller
             {
                 return new List<MessagesModal> { messages.Last() };
             }
+
+            
             else
             {
                 Console.WriteLine($"No messages found between {user1} and {user2}.");
