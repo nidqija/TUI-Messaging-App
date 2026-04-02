@@ -109,6 +109,14 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Services
 
                 messagesTableCmd.ExecuteNonQuery();
 
+                // ADD THIS: Create system user for Ollama if it doesn't exist
+                var systemUserCmd = connection.CreateCommand();
+                systemUserCmd.CommandText = @"
+                    INSERT OR IGNORE INTO users (username, password, email) 
+                    VALUES ('ollama', 'SYSTEM_USER', 'ollama@system.local');
+                ";
+                systemUserCmd.ExecuteNonQuery();
+
                 if (tableCmd.ExecuteNonQuery() > 0)
                 {
                     Console.WriteLine("Table 'users' created successfully.");
@@ -159,6 +167,24 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Services
                 Console.WriteLine($"{rowsAffected} rows affected.");
 
                 
+            }
+        }
+
+        public void performSQLOperationWithParameters(string sql, Dictionary<string, object> parameters)
+        {
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+                var command = connection.CreateCommand();
+                command.CommandText = sql;
+
+                foreach (var param in parameters)
+                {
+                    command.Parameters.AddWithValue(param.Key, param.Value);
+                }
+
+                int rowsAffected = command.ExecuteNonQuery();
+                Console.WriteLine($"{rowsAffected} rows affected.");
             }
         }
     }

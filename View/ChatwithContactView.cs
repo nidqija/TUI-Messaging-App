@@ -60,18 +60,20 @@ namespace TUI_Messaging_App.TUI_Messaging_App.View
                         {
                             // This triggers the SQL Save + Redis Publish
                             messagesController.insertMessage(currentUser, contact, content);
+
+
+                            if (content.StartsWith("@ollama") || content.StartsWith("/ollama"))
+                            {
+                                // Manually ping the Ollama service channel
+                                sub.Publish("messages:ollama", content);
+                            }
+
+
                             inputBuffer.Clear();
                             _needRefresh = true;
                         }
 
-                        else if (content.StartsWith("@ollama"))
-                        {
-                            string prompt = content.Substring("@ollama".Length).Trim();
-                            messagesController.insertMessage(currentUser, contact, $"[OLLAMA] {prompt}");
-                            inputBuffer.Clear();
-                            _needRefresh = true;
-
-                        }
+                        
                     }
                     else if (key.Key == ConsoleKey.Backspace && inputBuffer.Length > 0)
                     {
@@ -100,19 +102,31 @@ namespace TUI_Messaging_App.TUI_Messaging_App.View
             AnsiConsole.Clear();
             AnsiConsole.Write(new Rule($"[bold yellow]Chat: {contact}[/]").LeftJustified());
 
+            // 1. Fetch regular messages between you and the contact
             var messages = messagesController.getMessagesBetweenUsers(currentUser, contact) ?? new List<MessagesModal>();
+
+            // 2. Fetch messages where Ollama is talking to YOU 
+            var aiMessages = messagesController.getMessagesBetweenUsers("ollama", currentUser) ?? new List<MessagesModal>();
+
+            // 3. Combine and sort so they appear in order of time
+            var combinedMessages = messages.Concat(aiMessages).OrderBy(m => m.Timestamp).ToList();
+
             var grid = new Grid().Expand().AddColumn().AddColumn();
 
-            foreach (var message in messages)
+            foreach (var message in combinedMessages)
             {
                 bool isMe = message.SenderUsername == currentUser;
+                bool isAI = message.SenderUsername == "ollama";
+
                 var panel = new Panel(Markup.Escape(message.MessageContent ?? ""))
                     .RoundedBorder()
                     .Header($"[grey]{message.Timestamp:HH:mm}[/]", isMe ? Justify.Right : Justify.Left)
-                    .BorderColor(isMe ? Color.Blue : Color.Green);
+                    .BorderColor(isMe ? Color.Blue : (isAI ? Color.Yellow : Color.Green));
 
-                if (isMe) grid.AddRow(Text.Empty, panel);
-                else grid.AddRow(panel, Text.Empty);
+                if (isMe)
+                    grid.AddRow(Text.Empty, panel);
+                else
+                    grid.AddRow(panel, Text.Empty);
             }
 
             AnsiConsole.Write(grid);

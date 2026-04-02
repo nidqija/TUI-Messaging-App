@@ -8,7 +8,7 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Services
     internal class AskOllamaServices
     {
 
-        private String ollamaEndpointUrl = "http://localhost:11434/api/generate";
+        private String ollamaEndpointUrl = "http://localhost:11434/api/chat";
         private readonly HttpClient httpClient = new HttpClient();
         private static ConnectionMultiplexer redis = ConnectionMultiplexer.Connect("localhost");
         private readonly MessagesController messagesController = new MessagesController();
@@ -25,23 +25,19 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Services
             // listen for new messages sent to ollama and respond with the AI response
             sub.Subscribe("messages:ollama", async (channel, message) =>
             {
-                var recentMessages = messagesController.getMessagesBetweenUsers("ollama", SessionInitializer.Username);
-                var lastUserMsg = recentMessages.LastOrDefault(m => m.SenderUsername !=  "ollama");
+                // 1. Get the prompt from the Redis message content
+                string userPrompt = message.ToString();
+                string cleanPrompt = userPrompt.Replace("/ollama", "").Replace("@ollama", "").Trim();
 
+                // 2. Call Ollama
+                string aiResult = await GetOllamaResponse(cleanPrompt);
 
-                if (lastUserMsg != null &&
-        lastUserMsg.SenderUsername != "ollama" &&
-        (lastUserMsg.MessageContent.StartsWith("/ollama") || lastUserMsg.MessageContent.StartsWith("@ollama")))
-                {
-                    string cleanPrompt = lastUserMsg.MessageContent
-            .Replace("/ollama", "")
-            .Replace("@ollama", "")
-            .Trim();
+                // 3. Save to DB
+                messagesController.insertMessage("ollama", SessionInitializer.Username, $"[OLLAMA] {aiResult}");
 
-                    string aiResult = await GetOllamaResponse(cleanPrompt);
-
-                    messagesController.insertMessage("ollama", SessionInitializer.Username, $"[OLLAMA] {aiResult}");
-                }
+                // 4. Tell the UI to refresh
+                var pub = redis.GetSubscriber();
+                pub.Publish($"messages:{SessionInitializer.Username}", "REFRESH_CHAT");
             });
 
 
@@ -55,14 +51,19 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Services
                 var payload = new
                 {
                     model = "gemma3:1b",
-                    prompt = $"Instructions: You are a helpful TUI Assistant. User says: {prompt}",
+                    messages = new[]
+                    {
+                        new { role = "system", content = "You are a helpful TUI Assistant." },
+                        new { role = "user", content = prompt }
+
+                    },
                     stream = false
                 };
 
                 var response = await httpClient.PostAsJsonAsync(ollamaEndpointUrl, payload);
-                var result = await response.Content.ReadFromJsonAsync<OllamaPayload>();
+                var result = await response.Content.ReadFromJsonAsync<OllamaChatResponse>();
 
-                return result?.response ?? "Im sorry , I cannot answer that ";
+                return result?.message.content ?? "Im sorry , I cannot answer that ";
             }
             catch (Exception ex)
             {
@@ -71,10 +72,19 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Services
             }
         }
 
-        public class OllamaPayload
+        public class OllamaChatResponse
         {
-            [JsonPropertyName("response")]
-            public string response { get; set; }
+            [JsonPropertyName("message")]
+            public OllamaMessage message { get; set; }
+        }
+
+        public class OllamaMessage
+        {
+            [JsonPropertyName("role")]
+            public string role { get; set; }
+
+            [JsonPropertyName("content")]
+            public string content { get; set; }
         }
 
 

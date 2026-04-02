@@ -15,6 +15,10 @@ namespace TUI_Messaging_App.TUI_Messaging_App
             DatabaseService dbService = new DatabaseService();
             dbService.initializeDB();
 
+            var ollamaService = new AskOllamaServices();
+            ollamaService.Start();
+
+
             if (args.Length > 0 && args[0] == "initdb")
             {
                 dbService.initializeDB();

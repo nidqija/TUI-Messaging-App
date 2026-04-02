@@ -12,6 +12,9 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Controller
 
         MessagesModal messagesModal = new MessagesModal();
         private readonly Services.RedisMessagingServices redisMessagingServices = new Services.RedisMessagingServices();
+        string ollamaUsername = "ollama";
+
+
         public bool insertMessage(string senderUsername, string receiverUsername, string messageContent)
         {
 
@@ -42,12 +45,18 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Controller
                 return new List<MessagesModal> { messages.Last() };
             }
 
-            
+
             else
             {
                 Console.WriteLine($"No messages found between {user1} and {user2}.");
                 return new List<MessagesModal>();
             }
+        }
+
+
+        public List<MessagesModal> GetOllamaConversation(string user)
+        {
+            return getMessagesBetweenUsers(user, ollamaUsername);
         }
     }
 }

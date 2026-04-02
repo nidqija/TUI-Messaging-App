@@ -26,9 +26,10 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Model
                 return false;
             }
 
+            string safeContent = messageContent.Replace("'", "''");
 
             string sql = $"INSERT INTO messages (sender_username, receiver_username, message, timestamp) " +
-                         $"VALUES ('{senderUsername}', '{receiverUsername}', '{messageContent}', '{DateTime.Now:yyyy-MM-dd HH:mm:ss}')";
+                         $"VALUES ('{senderUsername}', '{receiverUsername}', '{safeContent}', '{DateTime.Now:yyyy-MM-dd HH:mm:ss}')";
 
             databaseService.performSQLOperation(sql);
 
