@@ -109,6 +109,16 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Services
 
                 messagesTableCmd.ExecuteNonQuery();
 
+            /*    var chatRoomTableCms = connection.CreateCommand();
+
+                chatRoomTableCms.CommandText = @"
+                    CREATE TABLE IF NOT EXISTS chat_rooms (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        room_name TEXT NOT NULL UNIQUE
+                    );";
+
+                chatRoomTableCms.ExecuteNonQuery(); */
+
                 // ADD THIS: Create system user for Ollama if it doesn't exist
                 var systemUserCmd = connection.CreateCommand();
                 systemUserCmd.CommandText = @"

@@ -74,6 +74,11 @@ namespace TUI_Messaging_App.TUI_Messaging_App.View
                     statusMessage = "Checking your requests...";
                     break;
 
+                case "Create Group":
+                    destination = "create group chat";
+                    statusMessage = "Opening your request...";
+                    break;
+
                 case "View Messages":
                     destination = "view messages";
                     statusMessage = "Fetching your messages...";
