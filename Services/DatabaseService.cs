@@ -114,7 +114,10 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Services
                 chatRoomTableCms.CommandText = @"
                     CREATE TABLE IF NOT EXISTS chat_rooms (
                         id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        room_name TEXT NOT NULL UNIQUE
+                        room_name TEXT NOT NULL UNIQUE,
+                        user_id INTEGER NOT NULL,  
+                        timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+                        FOREIGN KEY (user_id) REFERENCES users(id)
                     );";
 
                 chatRoomTableCms.ExecuteNonQuery(); 

@@ -1,14 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using Spectre.Console;
+using TUI_Messaging_App.TUI_Messaging_App.Controller;
+using TUI_Messaging_App.TUI_Messaging_App.Services;
 
 namespace TUI_Messaging_App.TUI_Messaging_App.View
 {
     internal class CreateGroupView
     {
+
+        private ChatRoomController chatRoomController = new ChatRoomController();
+        
+        
         public string createGroupView()
         {
+            int userId = SessionInitializer.UserID;
             AnsiConsole.Clear();
 
             AnsiConsole.Write(
@@ -30,6 +38,8 @@ namespace TUI_Messaging_App.TUI_Messaging_App.View
                     .Validate(name =>
                         name.Length >= 3 ? ValidationResult.Success() : ValidationResult.Error("[red]Name too short (min 3 chars)[/]"))
             );
+
+
 
             // --- STEP 3: SELECTION LIST (The 'Members') ---
             // Imagine these are fetched from your DatabaseService
@@ -63,8 +73,11 @@ namespace TUI_Messaging_App.TUI_Messaging_App.View
             // --- STEP 5: FINAL CONFIRMATION ---
             if (AnsiConsole.Confirm("Do you want to create this group now?"))
             {
-                AnsiConsole.MarkupLine($"[bold green]Success![/] Room [white]{roomName}[/] is being provisioned...");
-            }
+                if (chatRoomController.handleCreateChatRoom(userId, roomName))
+                {
+                    AnsiConsole.MarkupLine($"[bold green]Success![/] Room [white]{roomName}[/] is being provisioned...");
+                }
+                }
             else
             {
                 AnsiConsole.MarkupLine("[red]Creation cancelled.[/] Returning to menu...");
@@ -72,6 +85,7 @@ namespace TUI_Messaging_App.TUI_Messaging_App.View
 
             AnsiConsole.MarkupLine("\n[grey]Press any key to continue...[/]");
             Console.ReadKey(true);
+            
 
             return "create group chat";
         }
