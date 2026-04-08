@@ -109,7 +109,7 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Services
 
                 messagesTableCmd.ExecuteNonQuery();
 
-            /*    var chatRoomTableCms = connection.CreateCommand();
+                var chatRoomTableCms = connection.CreateCommand();
 
                 chatRoomTableCms.CommandText = @"
                     CREATE TABLE IF NOT EXISTS chat_rooms (
@@ -117,7 +117,7 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Services
                         room_name TEXT NOT NULL UNIQUE
                     );";
 
-                chatRoomTableCms.ExecuteNonQuery(); */
+                chatRoomTableCms.ExecuteNonQuery(); 
 
                 // ADD THIS: Create system user for Ollama if it doesn't exist
                 var systemUserCmd = connection.CreateCommand();
