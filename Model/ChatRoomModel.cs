@@ -1,50 +1,60 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TUI_Messaging_App.TUI_Messaging_App.Services;
+﻿    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using TUI_Messaging_App.TUI_Messaging_App.Services;
 
-namespace TUI_Messaging_App.TUI_Messaging_App.Model
-{
-    internal class ChatRoomModel
+    namespace TUI_Messaging_App.TUI_Messaging_App.Model
     {
-        private DatabaseService databaseService = new DatabaseService();
-        SessionInitializer sessionInitializer;
+        internal class ChatRoomModel
+        {
+            private DatabaseService databaseService = new DatabaseService();
+            SessionInitializer sessionInitializer;
         
 
 
-        public class GroupChatObject
-        {
-            public int Userid { get; set; }
-            public string GroupName { get; set; }
-        }
+            public class GroupChatObject
+            { 
+                public string GroupName { get; set; }
+            }
         
 
 
-        public bool insertNewGroup(string roomName , int userId )
-        {
-
-            if (roomName == null || userId == null)
+            public bool insertNewGroup(string roomName , int userId )
             {
-                Console.WriteLine("Group name and user ID cannot be null.");
-                return false;
-            }
 
-            string sql = $"INSERT INTO  chat_rooms (room_name , user_id,  timestamp) VALUES ( '{roomName}' , '{userId}' , '{DateTime.Now:yyyy-MM-dd HH:mm:ss}')";
+                if (roomName == null || userId == null)
+                {
+                    Console.WriteLine("Group name and user ID cannot be null.");
+                    return false;
+                }
 
-            databaseService.performSQLOperation(sql);
+                string sql = $"INSERT INTO  chat_rooms (room_name , user_id,  timestamp) VALUES ( '{roomName}' , '{userId}' , '{DateTime.Now:yyyy-MM-dd HH:mm:ss}')";
 
-            if (databaseService == null)
-            {
-                Console.WriteLine("Database service is not initialized.");
-                return false;
-            }
+                databaseService.performSQLOperation(sql);
+
+                if (databaseService == null)
+                {
+                    Console.WriteLine("Database service is not initialized.");
+                    return false;
+                }
 
   
-            return true;
+                return true;
 
 
+            }
+
+
+            public List<GroupChatObject> fetchAllChatRoom(int userId)
+            {
+                string sql = $"SELECT room_name AS GroupName FROM chat_rooms WHERE user_id = '{userId}'";
+            
+
+            
+            
+                return databaseService.GetList<GroupChatObject>(sql).ToList();
+            }
         }
     }
-}
