@@ -7,9 +7,10 @@ using System.Threading.Tasks;
 namespace TUI_Messaging_App.TUI_Messaging_App.Interface
 {
     
-        public interface IView
+        public interface IGroupCommand
         {
-           void Display();
+        void Execute(string groupId , string command);
+
         }
     
 }

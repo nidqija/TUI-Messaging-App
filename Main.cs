@@ -43,6 +43,7 @@ namespace TUI_Messaging_App.TUI_Messaging_App
             var seeContactsController = new SeeContactsView();
             var chatwithContactController = new ChatwithContactView();
             var createGroupChatController = new CreateGroupView();
+            var chatInGroupController = new ChatInGroupView();
 
 
             router.RegisterRoute("logout", authController.authView);
@@ -55,6 +56,7 @@ namespace TUI_Messaging_App.TUI_Messaging_App
             router.RegisterRoute("view contacts", seeContactsController.seeContactView );
             router.RegisterRoute("chat with contact", chatwithContactController.chatwithContactView );
             router.RegisterRoute("create group chat", createGroupChatController.createGroupView);
+            router.RegisterRoute("chat in group", chatInGroupController.chatInGroupView);
 
 
 
