@@ -58,5 +58,23 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Controller
         {
             return getMessagesBetweenUsers(user, ollamaUsername);
         }
+
+
+        public List<MessagesModal> handleFetchMessagesfromRoom(int roomId)
+        {
+
+            var messages = messagesModal.getLatestMessagefromGroup(roomId);
+
+            if (messages.Count > 0)
+            {
+                return messages;
+            }
+            else
+            {
+                Console.WriteLine($"No messages found for room ID: {roomId}.");
+                return new List<MessagesModal>();
+            }
+        }
     }
+
 }

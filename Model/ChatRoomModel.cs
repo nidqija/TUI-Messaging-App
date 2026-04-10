@@ -50,7 +50,7 @@
             {
                 string sql = $"SELECT room_name AS GroupName FROM chat_rooms WHERE user_id = '{userId}'";
             
-
+               
                 return databaseService.GetList<GroupChatObject>(sql).ToList();
             }
         }

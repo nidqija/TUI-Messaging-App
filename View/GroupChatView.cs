@@ -62,7 +62,7 @@ namespace TUI_Messaging_App.TUI_Messaging_App.View
                     .Title("Select a group or go back:")
                     .AddChoices(contactChoices));
 
-
+            
 
             if (choice == "[red]Back to Home[/]")
             {
@@ -74,7 +74,7 @@ namespace TUI_Messaging_App.TUI_Messaging_App.View
                 return "home";
             }
 
-            return "view groups";
+            return "chat in group";
         }
     }
 }

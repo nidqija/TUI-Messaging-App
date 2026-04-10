@@ -77,5 +77,18 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Model
         }
 
 
+        public List<MessagesModal> getLatestMessagefromGroup(int roomId)
+        {
+            string sql = $"SELECT id, " +
+                         $"sender_username AS SenderUsername, " +
+                         $"message AS MessageContent, " +
+                         $"timestamp AS Timestamp " +
+                         $"FROM room_messages " +
+                         $"WHERE room_id = '{roomId}' " +
+                         $"ORDER BY timestamp DESC ";
+            return databaseService.GetList<MessagesModal>(sql).ToList();
+
+
         }
+    }
 }

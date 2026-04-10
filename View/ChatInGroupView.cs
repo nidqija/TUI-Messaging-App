@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Spectre.Console;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
-using Spectre.Console;
+using TUI_Messaging_App.TUI_Messaging_App.Controller;
 using TUI_Messaging_App.TUI_Messaging_App.Interface;
+using TUI_Messaging_App.TUI_Messaging_App.Model;
 using TUI_Messaging_App.TUI_Messaging_App.Router;
 
 namespace TUI_Messaging_App.TUI_Messaging_App.View
@@ -11,6 +13,7 @@ namespace TUI_Messaging_App.TUI_Messaging_App.View
     internal class ChatInGroupView
     {
         private bool _needRefresh = false;
+        private MessagesController messagesController = new MessagesController();
 
         public string chatInGroupView()
         {
@@ -25,7 +28,7 @@ namespace TUI_Messaging_App.TUI_Messaging_App.View
             {
                 if (_needRefresh)
                 {
-                    RenderGroupInterface(groupName, currentUser, inputBuffer.ToString());
+                    RenderFullChat(1);
                     _needRefresh = false;
                 }
 
@@ -76,52 +79,38 @@ namespace TUI_Messaging_App.TUI_Messaging_App.View
             return "chat in group";
         }
 
-        private void RenderGroupInterface(string groupName, string currentUser, string currentInput)
+        private void RenderFullChat(int roomId)
         {
             AnsiConsole.Clear();
+            AnsiConsole.Write(new Rule($"[bold yellow]Chat: {roomId}[/]").LeftJustified());
 
-            // --- 1. HEADER ---
-            AnsiConsole.Write(new Rule($"[bold cyan]Group: {groupName}[/]").LeftJustified());
+            // 1. Fetch regular messages between you and the contact
+            var messages = messagesController.handleFetchMessagesfromRoom(roomId) ?? new List<MessagesModal>();
 
-            // --- 2. MOCKED MESSAGE DATA ---
-            // This mimics the structure of your models for the UI render
-            var mockMessages = new[]
+            if (messages.Count == 0)
             {
-                new { Sender = "Alice", Content = "Hey everyone! Status update?", Time = "10:05", IsAI = false },
-                new { Sender = "ollama", Content = "I am ready to assist with code reviews.", Time = "10:06", IsAI = true },
-                new { Sender = "AdminUser", Content = "I'm pushing the latest TUI changes now.", Time = "10:10", IsAI = false }
-            };
+                AnsiConsole.MarkupLine("[grey]No messages yet. Start the conversation![/]");
+                return;
+            }
+
+
 
             var grid = new Grid().Expand().AddColumn().AddColumn();
 
-            foreach (var msg in mockMessages)
+            foreach (var message in messages)
             {
-                bool isMe = msg.Sender == currentUser;
-                string senderDisplay = isMe ? "You" : msg.Sender;
+             
 
-                var panel = new Panel(Markup.Escape(msg.Content))
+                var panel = new Panel(Markup.Escape(message.MessageContent ?? ""))
                     .RoundedBorder()
-                    .Header($"[grey]{senderDisplay} • {msg.Time}[/]", isMe ? Justify.Right : Justify.Left)
-                    .BorderColor(isMe ? Color.SlateBlue1 : (msg.IsAI ? Color.Gold1 : Color.Grey));
+                    .Header($"[bold cyan]{message.SenderUsername}[/] [grey]{message.Timestamp:HH:mm}[/]");
 
-                // Right-align "My" messages, Left-align "Others"
-                if (isMe)
-                    grid.AddRow(Text.Empty, panel);
-                else
-                    grid.AddRow(panel, Text.Empty);
+
+
             }
 
             AnsiConsole.Write(grid);
-
-            // --- 3. FOOTER / INPUT AREA ---
             AnsiConsole.Write(new Rule().RuleStyle("grey30"));
-
-            // Display "You:" and then the current buffer (what the user is typing)
-            AnsiConsole.Markup($"[bold cyan]Message {groupName}:[/] {currentInput}");
-
-            // This cursor visual helps the user feel like they are typing in a real app
-            if (DateTime.Now.Millisecond < 500)
-                AnsiConsole.Markup("[blink]_[/]");
         }
     }
 }

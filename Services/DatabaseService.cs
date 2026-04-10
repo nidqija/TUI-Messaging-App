@@ -135,7 +135,24 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Services
                         FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
                   ); ";
 
+
                 groupChatTableCmd.ExecuteNonQuery();
+
+
+                var groupMessagesTableCmd = connection.CreateCommand();
+
+                groupMessagesTableCmd.CommandText = @"
+                    CREATE TABLE IF NOT EXISTS room_messages (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        room_id INTEGER NOT NULL,
+                        sender_username TEXT NOT NULL,
+                        message TEXT,
+                        timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+                        FOREIGN KEY (room_id) REFERENCES chat_rooms(id) ON DELETE CASCADE,
+                        FOREIGN KEY (sender_username) REFERENCES users(username) ON DELETE CASCADE
+                    );";
+
+                groupMessagesTableCmd.ExecuteNonQuery();
 
 
                 // ADD THIS: Create system user for Ollama if it doesn't exist
