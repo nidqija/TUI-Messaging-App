@@ -4,18 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TUI_Messaging_App.TUI_Messaging_App.Interface;
+using TUI_Messaging_App.TUI_Messaging_App.Services.CommandCollection;
 
 namespace TUI_Messaging_App.TUI_Messaging_App.Router
 {
     internal class CommandFactory
     {
-        public static IGroupCommand GetCommand(string commandType)
+        public static IGroupCommand ParseComment(string commandType)
         {
-            switch (commandType.ToLower())
-            {
-                case "add":
-                    return "add";
-            }
+            if (commandType.StartsWith("/admit")) return new AddMember();
+            if (commandType.StartsWith("/terminate")) return new DeleteMember();
+
+
+            return null;
         }
     }
 }

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using Spectre.Console;
+using TUI_Messaging_App.TUI_Messaging_App.Interface;
+using TUI_Messaging_App.TUI_Messaging_App.Router;
 
 namespace TUI_Messaging_App.TUI_Messaging_App.View
 {
@@ -35,6 +37,22 @@ namespace TUI_Messaging_App.TUI_Messaging_App.View
                     {
                         string content = inputBuffer.ToString().Trim();
                         if (content.ToLower() == ":q") break; // Exit command
+
+
+                      if (content.StartsWith("/"))
+                        {
+                            var command = CommandFactory.ParseComment(content);
+
+                            if ( command != null)
+                            {
+                                string argument = content.Split(' ').Last();
+                            }
+
+
+                        }
+
+
+
 
                         // Logic for "sending" would go here
                         inputBuffer.Clear();
