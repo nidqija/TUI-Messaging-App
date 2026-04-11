@@ -44,6 +44,9 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Model
         }
 
 
+      
+
+
         public List<MessagesModal> getMessagesBetweenUsers(string user1, string user2)
         {
             // Note the "message AS MessageContent" and "sender_username AS SenderUsername"

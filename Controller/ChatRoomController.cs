@@ -60,7 +60,7 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Controller
         {
 
 
-           if (chatRoom.Equals(null))
+            if (string.IsNullOrEmpty(chatRoom))
             {
                 Console.WriteLine("Chat room cannot be empty");
                 return new List<ChatRoomModel.GroupChatObject>();
@@ -70,6 +70,25 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Controller
 
 
             return result ?? new List<ChatRoomModel.GroupChatObject>();
+        }
+
+
+        public bool handleInsertMessageToChatRoom(string senderUsername, int roomId, string messageContent)
+        {
+            if (string.IsNullOrEmpty(senderUsername) || roomId <= 0 || string.IsNullOrEmpty(messageContent))
+            {
+                Console.WriteLine("Sender username, room ID, and message content cannot be empty or invalid.");
+                return false;
+            }
+            if (chatRoomModel.insertGroupMessage(senderUsername, roomId, messageContent))
+            {
+                return true;
+            }
+            else
+            {
+                Console.WriteLine($"Failed to insert message from '{senderUsername}' to chat room ID: {roomId}");
+                return false;
+            }
         }
     }
 }

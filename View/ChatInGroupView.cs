@@ -29,7 +29,7 @@ namespace TUI_Messaging_App.TUI_Messaging_App.View
             {
                 if (_needRefresh)
                 {
-                    RenderFullChat(SessionInitializer.groupChatID);
+                    RenderFullChat(SessionInitializer.groupChatID, inputBuffer.ToString());
                     _needRefresh = false;
                 }
 
@@ -43,11 +43,11 @@ namespace TUI_Messaging_App.TUI_Messaging_App.View
                         if (content.ToLower() == ":q") break; // Exit command
 
 
-                      if (content.StartsWith("/"))
+                        if (content.StartsWith("/"))
                         {
                             var command = CommandFactory.ParseComment(content);
 
-                            if ( command != null)
+                            if (command != null)
                             {
                                 string argument = content.Split(' ').Last();
                             }
@@ -80,38 +80,56 @@ namespace TUI_Messaging_App.TUI_Messaging_App.View
             return "chat in group";
         }
 
-        private void RenderFullChat(int roomId)
+        private void RenderFullChat(int roomId, string currentInput)
         {
             AnsiConsole.Clear();
-            AnsiConsole.MarkupLine($"[bold magenta]DEBUG: Session Room ID is {SessionInitializer.groupChatID}[/]");
-            AnsiConsole.MarkupLine($"[bold cyan]Group: {SessionInitializer.ActiveGroupChatName}[/]");
-            // 1. Fetch regular messages between you and the contact
+
+            // Get the name from the session we saved earlier
+            string groupName = SessionInitializer.ActiveGroupChatName ?? $"Room {roomId}";
+            string currentUser = SessionInitializer.Username;
+
+            AnsiConsole.Write(new Rule($"[bold yellow]Chat: {groupName}[/]").LeftJustified());
+
+            // 1. Fetch messages for the group
             var messages = messagesController.handleFetchMessagesfromRoom(roomId) ?? new List<MessagesModal>();
 
-            if (messages.Count == 0)
-            {
-                AnsiConsole.MarkupLine("[grey]No messages yet. Start the conversation![/]");
-                return;
-            }
-
-
-
+            // 2. We use a Grid with two columns for the "Left/Right" bubble effect
             var grid = new Grid().Expand().AddColumn().AddColumn();
 
             foreach (var message in messages)
             {
-             
+                // Check if the message is from the logged-in user
+                bool isMe = message.SenderUsername == currentUser;
+
+                // You can add logic here for specific users (like a bot or admin)
+                bool isAdmin = message.SenderUsername == "Admin";
 
                 var panel = new Panel(Markup.Escape(message.MessageContent ?? ""))
                     .RoundedBorder()
-                    .Header($"[bold cyan]{message.SenderUsername}[/] [grey]{message.Timestamp:HH:mm}[/]");
+                    // Design match: Timestamp in the header, justified based on sender
+                    .Header($"[bold]{message.SenderUsername}[/] [grey]{message.Timestamp:HH:mm}[/]", isMe ? Justify.Right : Justify.Left)
+                    // Design match: Blue for 'Me', Green for others (Yellow for AI/Admin if needed)
+                    .BorderColor(isMe ? Color.Blue : (isAdmin ? Color.Yellow : Color.Green));
 
-
-
+                if (isMe)
+                {
+                    // Message on the right
+                    grid.AddRow(Text.Empty, panel);
+                }
+                else
+                {
+                    // Message on the left
+                    grid.AddRow(panel, Text.Empty);
+                }
             }
 
             AnsiConsole.Write(grid);
+
+            // --- User Input Section ---
             AnsiConsole.Write(new Rule().RuleStyle("grey30"));
+
+            // Using Markup to match your design: "[bold blue]You:[/] currentText"
+            AnsiConsole.Markup($"[bold blue]You:[/] {currentInput}");
         }
     }
 }

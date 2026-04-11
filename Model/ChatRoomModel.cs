@@ -61,5 +61,25 @@
             string sql = $"SELECT id AS Id , room_name AS GroupName from chat_rooms WHERE room_name = `{roomName}`";
             return databaseService.GetList<GroupChatObject>(sql).ToList();
            }
+
+        public bool insertGroupMessage(string senderUsername, int roomId, string messageContent)
+        {
+            if (string.IsNullOrEmpty(senderUsername) || string.IsNullOrEmpty(messageContent))
+            {
+                Console.WriteLine("Sender and message content cannot be empty.");
+                return false;
+            }
+            string safeContent = messageContent.Replace("'", "''");
+            string sql = $"INSERT INTO room_messages (sender_username, room_id, message, timestamp) " +
+                         $"VALUES ('{senderUsername}', '{roomId}', '{safeContent}', '{DateTime.Now:yyyy-MM-dd HH:mm:ss}')";
+            databaseService.performSQLOperation(sql);
+            if (databaseService == null)
+            {
+                Console.WriteLine("Database service is not initialized.");
+                return false;
+            }
+            Console.WriteLine($"Message from {senderUsername} to room {roomId}: {messageContent}");
+            return true;
         }
+    }
     }
