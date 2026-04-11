@@ -63,6 +63,13 @@ namespace TUI_Messaging_App.TUI_Messaging_App.View
                     .AddChoices(contactChoices));
 
             
+            var selectedRoom = requests.FirstOrDefault(r => r.GroupName == choice);
+
+            if (selectedRoom != null)
+            {
+                SessionInitializer.groupChatID = selectedRoom.Id;
+                SessionInitializer.ActiveGroupChatName = selectedRoom.GroupName;
+            }
 
             if (choice == "[red]Back to Home[/]")
             {

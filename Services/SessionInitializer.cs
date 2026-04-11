@@ -21,12 +21,17 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Services
 
         public static string ActiveChatUser { get; set; }
 
+        public static int groupChatID { get; set; }
+
+        public static string ActiveGroupChatName { get; set; }
+
 
         public static void Login ( int id, string username, string email) {
             UserID = id;
             Username = username;
             Email = email;
             isLoggedIn = true;
+
         }
 
          public static void Logout()

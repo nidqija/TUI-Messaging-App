@@ -15,6 +15,7 @@
 
             public class GroupChatObject
             { 
+                public int Id { get; set; }
                 public string GroupName { get; set; }
             }
         
@@ -48,10 +49,17 @@
 
             public List<GroupChatObject> fetchAllChatRoom(int userId)
             {
-                string sql = $"SELECT room_name AS GroupName FROM chat_rooms WHERE user_id = '{userId}'";
+                string sql = $"SELECT id AS Id,  room_name AS GroupName FROM chat_rooms WHERE user_id = '{userId}'";
             
                
                 return databaseService.GetList<GroupChatObject>(sql).ToList();
             }
+
+            public List<GroupChatObject> fetchRoomId(string roomName)
+           {
+
+            string sql = $"SELECT id AS Id , room_name AS GroupName from chat_rooms WHERE room_name = `{roomName}`";
+            return databaseService.GetList<GroupChatObject>(sql).ToList();
+           }
         }
     }

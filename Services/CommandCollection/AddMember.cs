@@ -19,6 +19,7 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Services.CommandCollection
                 return;
             }
             string memberId = parts[1].Trim();
+
             Console.WriteLine($"Member '{memberId}' added to group '{groupId}'.");
         }
     }

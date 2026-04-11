@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TUI_Messaging_App.TUI_Messaging_App.Model;
+using TUI_Messaging_App.TUI_Messaging_App.View;
 
 namespace TUI_Messaging_App.TUI_Messaging_App.Controller
 {
@@ -52,6 +53,23 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Controller
                 return new List<ChatRoomModel.GroupChatObject>();
             }
             return chatRooms;
+        }
+
+
+        public List<ChatRoomModel.GroupChatObject> handleFetchChatRoomByID(string chatRoom)
+        {
+
+
+           if (chatRoom.Equals(null))
+            {
+                Console.WriteLine("Chat room cannot be empty");
+                return new List<ChatRoomModel.GroupChatObject>();
+            }
+
+            var result = chatRoomModel.fetchRoomId(chatRoom);
+
+
+            return result ?? new List<ChatRoomModel.GroupChatObject>();
         }
     }
 }

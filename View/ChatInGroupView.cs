@@ -7,6 +7,7 @@ using TUI_Messaging_App.TUI_Messaging_App.Controller;
 using TUI_Messaging_App.TUI_Messaging_App.Interface;
 using TUI_Messaging_App.TUI_Messaging_App.Model;
 using TUI_Messaging_App.TUI_Messaging_App.Router;
+using TUI_Messaging_App.TUI_Messaging_App.Services;
 
 namespace TUI_Messaging_App.TUI_Messaging_App.View
 {
@@ -28,7 +29,7 @@ namespace TUI_Messaging_App.TUI_Messaging_App.View
             {
                 if (_needRefresh)
                 {
-                    RenderFullChat(1);
+                    RenderFullChat(SessionInitializer.groupChatID);
                     _needRefresh = false;
                 }
 
@@ -82,8 +83,8 @@ namespace TUI_Messaging_App.TUI_Messaging_App.View
         private void RenderFullChat(int roomId)
         {
             AnsiConsole.Clear();
-            AnsiConsole.Write(new Rule($"[bold yellow]Chat: {roomId}[/]").LeftJustified());
-
+            AnsiConsole.MarkupLine($"[bold magenta]DEBUG: Session Room ID is {SessionInitializer.groupChatID}[/]");
+            AnsiConsole.MarkupLine($"[bold cyan]Group: {SessionInitializer.ActiveGroupChatName}[/]");
             // 1. Fetch regular messages between you and the contact
             var messages = messagesController.handleFetchMessagesfromRoom(roomId) ?? new List<MessagesModal>();
 

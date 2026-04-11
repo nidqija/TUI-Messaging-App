@@ -14,7 +14,7 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Model
 
         public bool insertNewGroupMember( int groupId, int memberId)
         {
-            //to be implemented later
+            
 
             String sql = $"INSERT INTO group_members (room_id, user_id) VALUES ({groupId}, {memberId})";
             databaseService.performSQLOperation(sql);
