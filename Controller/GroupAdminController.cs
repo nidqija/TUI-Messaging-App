@@ -13,7 +13,7 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Controller
         public bool handleAddMembertoGroup(int groupName , int memberUsername)
         {
             
-            if ( groupName == null || memberUsername == null)
+            if ( groupName <= 0 || memberUsername <= 0)
             {
                 Console.WriteLine("Group name and member username cannot be null.");
                 return false;

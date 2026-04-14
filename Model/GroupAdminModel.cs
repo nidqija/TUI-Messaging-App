@@ -7,33 +7,50 @@ using TUI_Messaging_App.TUI_Messaging_App.Services;
 
 namespace TUI_Messaging_App.TUI_Messaging_App.Model
 {
+
     internal class GroupAdminModel
     {
 
-        DatabaseService databaseService;
+         public class GroupMemberObject {
+            public int Id { get; set; }
+            public string Username { get; set; }
+        }
 
-        public bool insertNewGroupMember( int groupId, int memberId)
+       
+
+        DatabaseService databaseService = new DatabaseService();
+
+        public bool insertNewGroupMember(int groupId, int memberId)
         {
             
+            string sql = "INSERT INTO room_members (room_id, user_id) VALUES (@roomId, @userId)";
 
-            String sql = $"INSERT INTO group_members (room_id, user_id) VALUES ({groupId}, {memberId})";
-            databaseService.performSQLOperation(sql);
+            var parameters = new Dictionary<string, object>
+    {
+        { "@roomId", groupId },
+        { "@userId", memberId }
+    };
 
-
-            if (databaseService == null)
+            try
             {
-                Console.WriteLine("Error on the database service.");
-                return false;
-            }
-            else
-            {
-                Console.WriteLine($"Group member {memberId} added to group {groupId} successfully.");
+                databaseService.performSQLOperationWithParameters(sql, parameters);
                 return true;
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Database Error: {ex.Message}");
+                return false;
+            }
+        }
 
+        public List<GroupMemberObject> fetchUserforGroup(string memberName)
+        {
+            string sql = $"SELECT id AS Id, username AS Username FROM users WHERE username = '{memberName}'";
+            return databaseService.GetList<GroupMemberObject>(sql).ToList();
+        }
+        
 
-
-                
         }
     }
-}
+
+

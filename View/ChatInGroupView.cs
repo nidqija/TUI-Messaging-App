@@ -15,6 +15,7 @@ namespace TUI_Messaging_App.TUI_Messaging_App.View
     {
         private bool _needRefresh = false;
         private MessagesController messagesController = new MessagesController();
+        private ChatRoomController chatRoomController = new ChatRoomController();
 
         public string chatInGroupView()
         {
@@ -43,17 +44,42 @@ namespace TUI_Messaging_App.TUI_Messaging_App.View
                         if (content.ToLower() == ":q") break; // Exit command
 
 
-                        if (content.StartsWith("/"))
+                        if (content.StartsWith("/admin"))
                         {
-                            var command = CommandFactory.ParseComment(content);
 
-                            if (command != null)
+                            string targetUser = content.Replace("/admin" , "").Trim();
+
+                            if (!string.IsNullOrEmpty(targetUser))
                             {
-                                string argument = content.Split(' ').Last();
+                                var command = CommandFactory.ParseComment("/admin");
+
+                                if (command != null)
+                                {
+                                    command.Execute(SessionInitializer.groupChatID.ToString(), targetUser);
+                                }
+                                else
+                                {
+                                    // If it's null, the Factory doesn't recognize "/admin"
+                                    AnsiConsole.MarkupLine("[red]Error: Command '/admin' not recognized by CommandFactory.[/]");
+                                    Thread.Sleep(2000);
+                                }
+
                             }
+
+                            inputBuffer.Clear();
+                            _needRefresh = true;
+                            continue;
+
+
+
+
+                           
 
 
                         }
+
+                        chatRoomController.handleInsertMessageToChatRoom(SessionInitializer.Username, SessionInitializer.groupChatID, content);
+
 
 
 
@@ -110,6 +136,8 @@ namespace TUI_Messaging_App.TUI_Messaging_App.View
                     .Header($"[bold]{message.SenderUsername}[/] [grey]{message.Timestamp:HH:mm}[/]", isMe ? Justify.Right : Justify.Left)
                     // Design match: Blue for 'Me', Green for others (Yellow for AI/Admin if needed)
                     .BorderColor(isMe ? Color.Blue : (isAdmin ? Color.Yellow : Color.Green));
+
+                
 
                 if (isMe)
                 {
