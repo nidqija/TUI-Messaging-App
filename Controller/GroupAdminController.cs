@@ -10,19 +10,31 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Controller
     internal class GroupAdminController
     {
         private GroupAdminModel groupAdminModel = new GroupAdminModel();
-        public bool handleAddMembertoGroup(int groupName , int memberUsername)
+        public bool handleAddMembertoGroup(int groupName, int memberUsername)
         {
-            
-            if ( groupName <= 0 || memberUsername <= 0)
+
+            if (groupName <= 0 || memberUsername <= 0)
             {
                 Console.WriteLine("Group name and member username cannot be null.");
                 return false;
             }
 
-            groupAdminModel.insertNewGroupMember(groupName, memberUsername); 
+            groupAdminModel.insertNewGroupMember(groupName, memberUsername);
 
 
 
+            return true;
+        }
+
+
+        public bool handleRemoveMemberfromGroup(int groupName, int memberUsername)
+        {
+            if (groupName <= 0 || memberUsername <= 0)
+            {
+                Console.WriteLine("Group name and member username cannot be null.");
+                return false;
+            }
+            groupAdminModel.deleteGroupMemberfromRoom(groupName, memberUsername);
             return true;
         }
     }
