@@ -37,5 +37,7 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Controller
             groupAdminModel.deleteGroupMemberfromRoom(groupName, memberUsername);
             return true;
         }
+
+
     }
 }

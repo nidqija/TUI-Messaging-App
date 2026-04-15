@@ -14,6 +14,7 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Router
         {
             if (commandType.StartsWith("/admit")) return new AddMember();
             if (commandType.StartsWith("/terminate")) return new DeleteMember();
+            if (commandType.StartsWith("/list")) return new ViewMember();
 
 
             return null;
