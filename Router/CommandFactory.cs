@@ -12,7 +12,7 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Router
     {
         public static IGroupCommand ParseComment(string commandType)
         {
-            if (commandType.StartsWith("/admin")) return new AddMember();
+            if (commandType.StartsWith("/admit")) return new AddMember();
             if (commandType.StartsWith("/terminate")) return new DeleteMember();
 
 

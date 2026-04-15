@@ -44,14 +44,14 @@ namespace TUI_Messaging_App.TUI_Messaging_App.View
                         if (content.ToLower() == ":q") break; // Exit command
 
 
-                        if (content.StartsWith("/admin"))
+                        if (content.StartsWith("/admit"))
                         {
 
-                            string targetUser = content.Replace("/admin" , "").Trim();
+                            string targetUser = content.Replace("/admit" , "").Trim();
 
                             if (!string.IsNullOrEmpty(targetUser))
                             {
-                                var command = CommandFactory.ParseComment("/admin");
+                                var command = CommandFactory.ParseComment("/admit");
 
                                 if (command != null)
                                 {
@@ -60,7 +60,7 @@ namespace TUI_Messaging_App.TUI_Messaging_App.View
                                 else
                                 {
                                     // If it's null, the Factory doesn't recognize "/admin"
-                                    AnsiConsole.MarkupLine("[red]Error: Command '/admin' not recognized by CommandFactory.[/]");
+                                    AnsiConsole.MarkupLine("[red]Error: Command '/admit' not recognized by CommandFactory.[/]");
                                     Thread.Sleep(2000);
                                 }
 
@@ -71,14 +71,35 @@ namespace TUI_Messaging_App.TUI_Messaging_App.View
                             continue;
 
 
-
-
-                           
-
-
                         }
 
-                        chatRoomController.handleInsertMessageToChatRoom(SessionInitializer.Username, SessionInitializer.groupChatID, content);
+                        if (content.StartsWith("/terminate"))
+                        {
+                            string targetUser = content.Replace("/terminate", "").Trim();
+
+                            if (!string.IsNullOrEmpty(targetUser))
+                            {
+                                var command = CommandFactory.ParseComment("/terminate");
+
+                                if (command != null)
+                                {
+                                    command.Execute(SessionInitializer.groupChatID.ToString(), targetUser);
+                                }
+                                else
+                                {
+                                    AnsiConsole.MarkupLine("[red]Error: Command '/admin' not recognized by CommandFactory.[/]");
+                                    Thread.Sleep(2000);
+                                }
+                            }
+
+                            inputBuffer.Clear();
+                            _needRefresh = true;
+                            continue;
+                        }
+
+                       
+
+                            chatRoomController.handleInsertMessageToChatRoom(SessionInitializer.Username, SessionInitializer.groupChatID, content);
 
 
 

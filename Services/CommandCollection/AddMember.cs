@@ -21,7 +21,7 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Services.CommandCollection
 
             if (string.IsNullOrWhiteSpace(memberName))
             {
-                Console.WriteLine("Error: Please provide a username. Usage: /admin username");
+                Console.WriteLine("Error: Please provide a username. Usage: /admit username");
                 return;
             }
 
