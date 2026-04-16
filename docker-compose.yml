@@ -5,11 +5,11 @@
     restart: unless-stopped
     environment:
       - API_KEY=your_api_key_here
-      - PROVIDER=openrouter # or openai, anthropic, ollama
+      - PROVIDER=openrouter 
       - ZEROCLAW_ALLOW_PUBLIC_BIND=true
-      - ZEROCLAW_GATEWAY_HOST=0.0.0.0  # <--- Add this line
+      - ZEROCLAW_GATEWAY_HOST=0.0.0.0 
       - ZEROCLAW_GATEWAY_PORT=42617
-      - ZEROCLAW_REQUIRE_PAIRING=false  # <--- Add this line
+      - ZEROCLAW_REQUIRE_PAIRING=false  
     ports:
       - "42617:42617"
     volumes:
