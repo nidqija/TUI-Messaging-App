@@ -1,4 +1,4 @@
-﻿
+﻿using System;
 using TUI_Messaging_App.TUI_Messaging_App.Router;
 using TUI_Messaging_App.TUI_Messaging_App.Services;
 using TUI_Messaging_App.TUI_Messaging_App.View;
@@ -9,7 +9,7 @@ namespace TUI_Messaging_App.TUI_Messaging_App
 {
     public class MainProgram
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
 
             DatabaseService dbService = new DatabaseService();
@@ -17,6 +17,20 @@ namespace TUI_Messaging_App.TUI_Messaging_App
 
             var ollamaService = new AskOllamaServices();
             ollamaService.Start();
+
+            var client = new HttpClient();
+
+            try
+            {
+                var test = await client.GetStringAsync("http://localhost:42617/health");
+                Console.WriteLine($"Docker Connection: Success! {test}");
+                System.Threading.Thread.Sleep(2000); // Sleep for 2 seconds to allow the container to fully initialize
+            }
+            catch
+            {
+                Console.WriteLine("Docker Connection: Failed. Check if the container is up.");
+                System.Threading.Thread.Sleep(2000); // Sleep for 2 seconds before proceeding, even if the connection fails
+            }
 
 
             if (args.Length > 0 && args[0] == "initdb")
@@ -65,6 +79,10 @@ namespace TUI_Messaging_App.TUI_Messaging_App
             router.Run("logout");
 
             }
+
+
+
+
 
     
 

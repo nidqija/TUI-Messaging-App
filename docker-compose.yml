@@ -1,0 +1,16 @@
+﻿services:
+  zeroclaw:
+    image: ghcr.io/zeroclaw-labs/zeroclaw:latest
+    container_name: zeroclaw-gateway
+    restart: unless-stopped
+    environment:
+      - API_KEY=your_api_key_here
+      - PROVIDER=openrouter # or openai, anthropic, ollama
+      - ZEROCLAW_ALLOW_PUBLIC_BIND=true
+      - ZEROCLAW_GATEWAY_HOST=0.0.0.0  # <--- Add this line
+      - ZEROCLAW_GATEWAY_PORT=42617
+      - ZEROCLAW_REQUIRE_PAIRING=false  # <--- Add this line
+    ports:
+      - "42617:42617"
+    volumes:
+      - ./zeroclaw-data:/zeroclaw-data
