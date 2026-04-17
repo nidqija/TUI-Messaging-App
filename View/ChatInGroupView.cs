@@ -97,6 +97,27 @@ namespace TUI_Messaging_App.TUI_Messaging_App.View
                             continue;
                         }
 
+                        if (content.StartsWith("/scheduler"))
+                        {
+                            string scheduleInfo = content.Replace("/scheduler", "").Trim();
+                            if (!string.IsNullOrEmpty(scheduleInfo))
+                            {
+                                var command = CommandFactory.ParseComment("/scheduler");
+                                if (command != null)
+                                {
+                                    command.Execute(SessionInitializer.groupChatID.ToString(), scheduleInfo);
+                                }
+                                else
+                                {
+                                    AnsiConsole.MarkupLine("[red]Error: Command '/scheduler' not recognized by CommandFactory.[/]");
+                                    Thread.Sleep(2000);
+                                }
+                            }
+                            inputBuffer.Clear();
+                            _needRefresh = true;
+                            continue;
+                        }
+
                        
 
                             chatRoomController.handleInsertMessageToChatRoom(SessionInitializer.Username, SessionInitializer.groupChatID, content);
