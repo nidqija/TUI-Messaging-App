@@ -1,17 +1,22 @@
 ﻿services:
   zeroclaw:
-    image: ghcr.io/zeroclaw-labs/zeroclaw:latest
+    image: ghcr.io/zeroclaw-labs/zeroclaw:lates
     container_name: zeroclaw-gateway
     restart: unless-stopped
+    # ... other settings ...
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     environment:
-      - API_KEY=your_api_key_here
       - PROVIDER=ollama
       - OLLAMA_HOST=http://host.docker.internal:11434
-      - ZEROCLAW_MODEL=qwen3-vl:8b      
+      - ZEROCLAW_MODEL=qwen3-vl:8b
       - ZEROCLAW_ALLOW_PUBLIC_BIND=true
-      - ZEROCLAW_GATEWAY_HOST=0.0.0.0 
+      - ZEROCLAW_GATEWAY_HOST=0.0.0.0
       - ZEROCLAW_GATEWAY_PORT=42617
-      - ZEROCLAW_REQUIRE_PAIRING=false  
+      - ZEROCLAW_REQUIRE_PAIRING=false
+      # THE FIX:
+      - ZEROCLAW_GATEWAY_HTTP_ENDPOINTS_CHAT_COMPLETIONS_ENABLED=true
+      - ZEROCLAW_API_MODE=openai
     ports:
       - "42617:42617"
     volumes:
