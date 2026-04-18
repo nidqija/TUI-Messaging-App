@@ -88,7 +88,7 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Model
                          $"timestamp AS Timestamp " +
                          $"FROM room_messages " +
                          $"WHERE room_id = '{roomId}' " +
-                         $"ORDER BY timestamp DESC ";
+                         $"ORDER BY timestamp ASC ";
             return databaseService.GetList<MessagesModal>(sql).ToList();
 
 

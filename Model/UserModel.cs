@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TUI_Messaging_App.TUI_Messaging_App.Services;
+using static TUI_Messaging_App.TUI_Messaging_App.Model.GroupAdminModel;
+
 
 namespace TUI_Messaging_App.TUI_Messaging_App.Model
 {
@@ -20,6 +22,9 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Model
         {
             dbService = new DatabaseService();
         }
+
+
+
 
         public bool createUser(string username, string password, string email)
         {
@@ -96,28 +101,56 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Model
         }
 
 
-       /* public bool seeApprovedMessageRequest(string senderUsername , string receiverUsername)
+        public List<ChatRoomModel.GroupChatObject> fetchGroupChatAsMember(string userID, string groupID)
         {
-            Console.WriteLine($"Seeing approved message request from {senderUsername} to {receiverUsername}");
-            UserModel sender = searchUser(senderUsername);
-            UserModel receiver = searchUser(receiverUsername);
 
-            if (sender == null || receiver == null)
+            if (string.IsNullOrEmpty(userID) || string.IsNullOrEmpty(groupID))
             {
-                Console.WriteLine("Sender or receiver does not exist.");
-                return false;
+                Console.WriteLine("User ID or Group ID is null or empty.");
+                return new List<ChatRoomModel.GroupChatObject>();
+            }
+            else
+            {
+                try
+                {
+                    string sql = "SELECT id as Id FROM room_members WHERE id IN (SELECT user_id FROM group_members WHERE group_id = @groupID)";
+                    return dbService.GetList<ChatRoomModel.GroupChatObject>(sql, new { groupID = groupID }).ToList();
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"An error occurred while fetching group chat as member: {ex.Message}");
+                    return new List<ChatRoomModel.GroupChatObject>();
+                }
+
+
+
             }
 
-            string sql = $"SELECT receiver_id FROM requests WHERE sender_id= {sender.id}";
 
-            dbService.performSQLOperation(sql);
+            /* public bool seeApprovedMessageRequest(string senderUsername , string receiverUsername)
+             {
+                 Console.WriteLine($"Seeing approved message request from {senderUsername} to {receiverUsername}");
+                 UserModel sender = searchUser(senderUsername);
+                 UserModel receiver = searchUser(receiverUsername);
 
-            return true;
-        } */
+                 if (sender == null || receiver == null)
+                 {
+                     Console.WriteLine("Sender or receiver does not exist.");
+                     return false;
+                 }
+
+                 string sql = $"SELECT receiver_id FROM requests WHERE sender_id= {sender.id}";
+
+                 dbService.performSQLOperation(sql);
+
+                 return true;
+             } */
 
 
 
-        
 
+
+        }
     }
 }

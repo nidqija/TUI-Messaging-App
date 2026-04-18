@@ -49,10 +49,20 @@
 
             public List<GroupChatObject> fetchAllChatRoom(int userId)
             {
-                string sql = $"SELECT id AS Id,  room_name AS GroupName FROM chat_rooms WHERE user_id = '{userId}'";
+            string sql = @"
+            SELECT id AS Id, room_name AS GroupName 
+            FROM chat_rooms 
+            WHERE user_id = @userId
             
-               
-                return databaseService.GetList<GroupChatObject>(sql).ToList();
+            UNION
+            
+            SELECT cr.id AS Id, cr.room_name AS GroupName 
+            FROM chat_rooms cr
+            INNER JOIN room_members gm ON cr.id = gm.room_id
+            WHERE gm.user_id = @userId";
+
+
+            return databaseService.GetList<GroupChatObject>(sql, new { userId = userId }).ToList();
             }
 
             public List<GroupChatObject> fetchRoomId(string roomName)

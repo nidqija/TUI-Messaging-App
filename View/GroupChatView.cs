@@ -49,6 +49,8 @@ namespace TUI_Messaging_App.TUI_Messaging_App.View
                 .AddColumn(new TableColumn("[bold cyan]Members[/]").Centered());
 
             var contactChoices = requests.Select(r => r.GroupName).ToList();
+
+            
             contactChoices.Add("[red]Back to Home[/]");
 
 

@@ -123,20 +123,37 @@ namespace TUI_Messaging_App.TUI_Messaging_App.Controller
             }
         } 
 
-
-       /* public bool fetchApprovedContact(string username)
+        public bool handleFetchGroupAsMember(string userID, string groupID)
         {
             UserModel userModel = new UserModel();
-            if (userModel.seeApprovedMessageRequest(username, SessionInitializer.Username))
+            var groups = userModel.fetchGroupChatAsMember(userID, groupID);
+
+            if (groups != null && groups.Count > 0)
             {
-                Console.WriteLine("Approved contact fetched successfully!");
+                Console.WriteLine("Groups fetched successfully!");
                 return true;
             }
             else
             {
-                Console.WriteLine("Failed to fetch approved contact. Please try again.");
+                Console.WriteLine("Failed to fetch groups. Please try again.");
                 return false;
             }
-        } */
+        }
+
+
+        /* public bool fetchApprovedContact(string username)
+         {
+             UserModel userModel = new UserModel();
+             if (userModel.seeApprovedMessageRequest(username, SessionInitializer.Username))
+             {
+                 Console.WriteLine("Approved contact fetched successfully!");
+                 return true;
+             }
+             else
+             {
+                 Console.WriteLine("Failed to fetch approved contact. Please try again.");
+                 return false;
+             }
+         } */
     }
 }
