@@ -42,7 +42,6 @@ namespace TUI_Messaging_App.TUI_Messaging_App.View
                         "View Contacts",
                         "View Groups",
                         "Create Group",
-                        "View Messages",
                         "View User Requests",
                         "[red]Logout[/]"
                     }));
@@ -79,10 +78,7 @@ namespace TUI_Messaging_App.TUI_Messaging_App.View
                     statusMessage = "Opening your request...";
                     break;
 
-                case "View Messages":
-                    destination = "view messages";
-                    statusMessage = "Fetching your messages...";
-                    break;
+               
                 case "[red]Logout[/]":
                     destination = "logout";
                     statusMessage = "Logging out securely...";

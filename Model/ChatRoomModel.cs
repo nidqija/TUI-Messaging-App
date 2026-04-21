@@ -68,9 +68,9 @@
             public List<GroupChatObject> fetchRoomId(string roomName)
            {
 
-            string sql = $"SELECT id AS Id , room_name AS GroupName from chat_rooms WHERE room_name = `{roomName}`";
-            return databaseService.GetList<GroupChatObject>(sql).ToList();
-           }
+            string sql = "SELECT id AS Id, room_name AS GroupName FROM chat_rooms WHERE room_name = @roomName";
+            return databaseService.GetList<GroupChatObject>(sql, new { roomName }).ToList();
+        }
 
         public bool insertGroupMessage(string senderUsername, int roomId, string messageContent)
         {

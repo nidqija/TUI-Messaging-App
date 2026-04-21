@@ -23,11 +23,18 @@ namespace TUI_Messaging_App.TUI_Messaging_App.View
             string groupName = "Developers Hub";
             string currentUser = "AdminUser";
             StringBuilder inputBuffer = new StringBuilder();
+            DateTime lastRefresh = DateTime.Now;
 
             _needRefresh = true;
 
             while (true)
             {
+
+                if ((DateTime.Now - lastRefresh).TotalSeconds > 1)
+                {
+                    _needRefresh = true;
+                    lastRefresh = DateTime.Now;
+                }
                 if (_needRefresh)
                 {
                     RenderFullChat(SessionInitializer.groupChatID, inputBuffer.ToString());
@@ -129,6 +136,7 @@ namespace TUI_Messaging_App.TUI_Messaging_App.View
                         // Logic for "sending" would go here
                         inputBuffer.Clear();
                         _needRefresh = true;
+                        continue;
                     }
                     else if (key.Key == ConsoleKey.Backspace && inputBuffer.Length > 0)
                     {
